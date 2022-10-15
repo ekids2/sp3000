@@ -1,55 +1,74 @@
 import pygame
 
-# Initialize a block with constants for our game window
+# Ініціалізація змінних, числових, які будемо використовувати надалі при створенні нашого вікна гри
 SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 800
 
-# Initialization of colors that we need later for filling, for example, the background of the screen and the object
-# with which we will work
+# Цей блок коду нам уже не потрібен, бо ми замість заливки будемо використовувати малюнок
+# То цей блок коду можемо сміло видалити
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Initialize all imported pygame modules
+# Ініціалізація всих допоміжних команд з модулю PYGAME
 pygame.init()
 
-# Initialize a window or screen for display
+# Задати розміри екрану нашої гри
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
-# Let's name our window so that it is clear what game it is
-pygame.display.set_caption("Space Invader 3000")
+# Назва нашої гри
+pygame.display.set_caption('Space Invader 3000')
 
-# Let's create an object, a rectangle, with coordinates where it will be placed when opening our game
-rect = pygame.Rect((0, 0), (32, 32))
+# Завантажити малюнок, який буде фоном у нашій грі
+GAME_BACKGROUND = pygame.image.load('resources/background.png').convert()
 
-# And also we need to create something that will be in our object, that is our future icon of our Space Invader 3000
-image = pygame.Surface((32, 32))
+# Іконка нашої програми
+filename = 'resources/ufo.png'
+ufo = pygame.image.load(filename)
 
-# For a simple example and to learn better of the material, we can simply fill it with white color, which we have
-# already created before
-image.fill(WHITE)
+# Сказати модулю PYGAME, що ми хочемо встановити ворогів на екрані
+pygame.display.set_icon(ufo)
 
-# Also we can control the FPS in our game, for that let's do the following -
-CLOCK = pygame.time.Clock()
-FPS = 60  # Frames per second.
+# Створення нашого Спейс Інвайдера, й вказання на яких координатах він буде розташований
+AIRCRAFT_PLAYER_IMG = pygame.image.load('resources/spaceship.1.png')
+AIRCRAFT_POSITION_X = 370
+AIRCRAFT_POSITION_Y = 480
+AIRCRAFT_POSITION_X_CHANGE = 0
 
-RUNNING = True
 
-while RUNNING:
-    # Control the maximum frame rate of the game is 60
-    CLOCK.tick(FPS)
+def player(x, y):
+    screen.blit(AIRCRAFT_PLAYER_IMG, (x, y))
+
+
+# Game Loop
+running = True
+while running:
+
+    # RGB = Red, Green, Blue
+    screen.fill((0, 0, 0))
+
+    # Background Image
+    screen.blit(GAME_BACKGROUND, (0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            quit()
-        # elif event.type == pygame.KEYDOWN:
-        #     if event.key == pygame.K_UP:
-        #         rect.move_ip(0, -2)
-        #     elif event.key == pygame.K_DOWN:
-        #         rect.move_ip(0, 2)
-        #     elif event.key == pygame.K_LEFT:
-        #         rect.move_ip(-2, 0)
-        #     elif event.key == pygame.K_RIGHT:
-        #         rect.move_ip(2, 0)
+            running = False
 
-        screen.fill(BLACK)
-        screen.blit(image, rect)
-        pygame.display.update()  # Or pygame.display.flip()
+        # if keystroke is pressed check whether its right or left
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                AIRCRAFT_POSITION_X_CHANGE = -5
+            if event.key == pygame.K_RIGHT:
+                AIRCRAFT_POSITION_X_CHANGE = 5
+
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                AIRCRAFT_POSITION_X_CHANGE = 0
+
+    AIRCRAFT_POSITION_X += AIRCRAFT_POSITION_X_CHANGE
+    if AIRCRAFT_POSITION_X <= 0:
+        AIRCRAFT_POSITION_X = 0
+    elif AIRCRAFT_POSITION_X >= 736:
+        AIRCRAFT_POSITION_X = 736
+
+    player(AIRCRAFT_POSITION_X, AIRCRAFT_POSITION_Y)
+    pygame.display.update()
