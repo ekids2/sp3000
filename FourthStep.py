@@ -79,14 +79,14 @@ while running:
     screen.blit(GAME_BACKGROUND, (0, 0))
 
     # Генеруємо наших ворогів
-    if shot_distance % 50 == 0:
-        enemy_position = [random.randint(0, SCREEN_WIDTH - enemy.width), 0]
-        enemy_ship = EnemyShip(enemy_images, enemy_down_images, enemy_position)
-        enemies.add(enemy_ship)
+    # if shot_distance % 50 == 0:
+    #    enemy_position = [random.randint(0, SCREEN_WIDTH - enemy.width), 0]
+    #    enemy_ship = EnemyShip(enemy_images, enemy_down_images, enemy_position)
+    #    enemies.add(enemy_ship)
 
     # Використовуємо цикл, й вказуємо щоб всі кораблі прибульці почали рухатись
-    for enemy_ in enemies:
-        enemy_.move()
+    #for enemy_ in enemies:
+    #    enemy_.move()
 
     # Створюємо блок коду - умову за допомогою якої питаємо у програми яку подію наразі обрав користувач
     # Якщо це подія - вийти з програми - ми успішно виходимо
@@ -111,9 +111,11 @@ while running:
         challenger.moveRight()
 
     # Малюємо на нашому екрані гри кулю, яка прикріплена до нашого космічного корабля
-    challenger.shoot(bullet_images)
-    challenger.bullets.draw(screen)
-    enemies.draw(screen)
+    # challenger.shoot(bullet_images)
+    # challenger.bullets.draw(screen)
+
+    # Малюємо на екрані кораблі суперників
+    # enemies.draw(screen)
 
     # Малюємо наш космічний корабель на екрані гри
     screen.blit(challenger.image[challenger.img_index], challenger.rect)
